@@ -1,0 +1,63 @@
+#******Using subpath**************
+
+mkdir -p /var/www/html/naveen/
+mkdir -p /var/www/html/manish/
+
+cd /var/www/html/naveen/
+wget first-template
+unzip first-template
+(code sara bhar hona chahiye dir me nahi)
+
+cd /var/www/html/manish/
+wget second-template
+unzip second-templte
+(code sara bhar hona chahiye dir me nahi)
+
+
+#******virtual hosting*******
+(two website host in two subdomain)
+
+cd /etc/apache2/sites-available
+vim naveen.conf
+ <VirtualHost *:80>
+    ServerAdmin naveen.cloudwareindia.cloud
+    ServerName naveen.cloudwareindia.cloud
+    ServerAlias www.naveen.cloudwareindia.cloud
+
+    DocumentRoot /var/www/html/naveen/
+    <Directory /var/www/html/naveen/>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/naveen.cloudwareindia.cloud_error.log
+    CustomLog ${APACHE_LOG_DIR}/naveen.cloudwareindia.cloud_access.log combined
+</VirtualHost>
+
+sudo a2dissite 000-default.conf
+sudo a2ensite naveen.conf
+sudo systemctl restart apache2
+
+
+
+cd /etc/apache2/sites-available
+vim manish
+<VirtualHost *:80>
+    ServerAdmin manish.cloudwareindia.cloud
+    ServerName manish.cloudwareindia.cloud
+    ServerAlias www.manish.cloudwareindia.cloud
+
+    DocumentRoot /var/www/html/manish/
+    <Directory /var/www/html/manish/>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/manish.cloudwareindia.cloud_error.log
+    CustomLog ${APACHE_LOG_DIR}/manish.cloudwareindia.cloud_access.log combined
+</VirtualHost>
+
+sudo a2ensite manish.conf
+sudo systemctl restart apache2
